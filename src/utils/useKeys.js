@@ -1,0 +1,24 @@
+import { useEffect, useRef } from "react";
+
+export default function useKeys() {
+  const keys = useRef({});
+
+  useEffect(() => {
+    const down = (e) => {
+      if (e.code.startsWith("Arrow")) e.preventDefault(); // évite que la page défile
+      keys.current[e.code] = true;
+    };
+    const up = (e) => {
+      keys.current[e.code] = false;
+    };
+
+    window.addEventListener("keydown", down);
+    window.addEventListener("keyup", up);
+    return () => {
+      window.removeEventListener("keydown", down);
+      window.removeEventListener("keyup", up);
+    };
+  }, []);
+
+  return keys;
+}
