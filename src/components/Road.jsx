@@ -11,8 +11,6 @@ export default function Road({
   const count = Math.floor((length + GAP) / step);
   const start = -((count * step - GAP) / 2) + DASH / 2; // pour centrer les tirets
 
-  const edgeOffset = width / 2 - 0.3; // distance du centre aux lignes de bord
-
   return (
     <group position={position} rotation-y={rotation}>
       <mesh rotation-x={-Math.PI / 2} position={[0, 0.01, 0]}>

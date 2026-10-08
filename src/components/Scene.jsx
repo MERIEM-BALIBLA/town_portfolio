@@ -4,25 +4,8 @@ import Player from "../utils/Player";
 import { useRef } from "react";
 import { stations } from "../assets/json/stations";
 import Station from "./Station";
-
-const SECTION_W = 24;
-const SECTION_D = 38;
-const SECTION_H = 0.2;
-
-function Section({ position = [0, 0], color = "#6b8e4e", children }) {
-  const [x, z] = position;
-
-  return (
-    <group position={[x, 0, z]}>
-      <mesh position={[0, SECTION_H / 2, 0]}>
-        <boxGeometry args={[SECTION_W, SECTION_H, SECTION_D]} />
-        <meshStandardMaterial color={color} />
-      </mesh>
-
-      {/* {children} */}
-    </group>
-  );
-}
+import Section from "./Section";
+import AboutSection from "./sections/AboutSection";
 
 export default function Scene() {
   const playerRef = useRef();
@@ -33,7 +16,7 @@ export default function Scene() {
       <OrbitControls
         makeDefault
         enablePan={false}
-        minDistance={10}
+        minDistance={2}
         maxDistance={150}
         maxPolarAngle={Math.PI / 2.1}
       />
@@ -45,7 +28,7 @@ export default function Scene() {
       <Road position={[-14, 0, 0]} rotation={Math.PI / 2} />
       <Road position={[14, 0, 0]} rotation={Math.PI / 2} />
 
-      <Section position={[-28, -21]} />
+      <AboutSection position={[-28, -21]} />
       <Section position={[0, -21]} />
       <Section position={[28, -21]} />
 
@@ -58,6 +41,7 @@ export default function Scene() {
       ))}
 
       <Player playerRef={playerRef} focusRef={focusRef} start={[0, 0, 0]} />
+      <axesHelper args={[8]} />
     </>
   );
 }
