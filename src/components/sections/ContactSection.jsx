@@ -7,7 +7,7 @@ import GlassCard from "../contact/GlassCard";
 import { LinkedinIcon, MailIcon, GithubIcon } from "../contact/Icons";
 import Podium from "../contact/Podium";
 import Plant from "../about/Plant";
-import { NeonPanel, Planter } from "../contact/SideDecor";
+import { NeonPanel, Planter } from "../contact/Sidedecor";
 
 export default function ContactSection({ position }) {
   return (
