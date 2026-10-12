@@ -29,7 +29,8 @@ function SvgIcon({ path, size = 1.4, color = "#2b2233" }) {
   const geometry = useMemo(() => {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="${path}"/></svg>`;
     const data = new SVGLoader().parse(svg);
-    const shapes = data.paths.flatMap((p) => SVGLoader.createShapes(p));
+    const shapes = data.paths.flatMap((p) => p.toShapes());
+
     const geo = new THREE.ExtrudeGeometry(shapes, {
       depth: 2.5,
       bevelEnabled: false,

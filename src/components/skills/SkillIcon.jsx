@@ -27,9 +27,7 @@ export default function SkillIcon({
 
     const geos = [];
     data.paths.forEach((p) => {
-      SVGLoader.createShapes(p).forEach((s) =>
-        geos.push(new THREE.ShapeGeometry(s)),
-      );
+      p.toShapes().forEach((s) => geos.push(new THREE.ShapeGeometry(s)));
     });
 
     const box = new THREE.Box3();
