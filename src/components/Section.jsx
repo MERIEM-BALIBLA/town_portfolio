@@ -4,7 +4,7 @@ const SECTION_H = 0.2;
 
 export default function Section({
   position = [0, 0],
-  color = "#6b8e4e",
+  color = "#bcbadc",
   children,
 }) {
   const [x, z] = position;

@@ -15,7 +15,7 @@ export default function Road({
     <group position={position} rotation-y={rotation}>
       <mesh rotation-x={-Math.PI / 2} position={[0, 0.01, 0]}>
         <planeGeometry args={[length, width]} />
-        <meshStandardMaterial color="#555555" />
+        <meshStandardMaterial color="#8a8080" />
       </mesh>
       {/* Tirets au centre */}
       {Array.from({ length: count }).map((_, i) => (

@@ -1,155 +1,5 @@
-// import { useMemo } from "react";
-// import { RoundedBox } from "@react-three/drei";
-
-// const COLORS = [
-//   "#e63946",
-//   "#f4a024",
-//   "#f7d13a",
-//   "#3fa34d",
-//   "#2c7be5",
-//   "#8b5cf6",
-//   "#e63946",
-//   "#f4a024",
-//   "#1f6f8b",
-//   "#d94f4f",
-//   "#2b3a55",
-//   "#f7b32b",
-// ];
-
-// function mulberry32(seed) {
-//   return function () {
-//     seed |= 0;
-//     seed = (seed + 0x6d2b79f5) | 0;
-//     let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-//     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-//     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-//   };
-// }
-
-// function Book({ w, h, d, color }) {
-//   return (
-//     <group>
-//       <mesh castShadow>
-//         <boxGeometry args={[w, h, d]} />
-//         <meshStandardMaterial color={color} roughness={0.5} />
-//       </mesh>
-//       <mesh position={[w / 2 + 0.001, 0, 0]}>
-//         <planeGeometry args={[d * 0.9, h * 0.88]} />
-//         <meshStandardMaterial color="#f2e8d5" roughness={0.9} />
-//       </mesh>
-//     </group>
-//   );
-// }
-
-// export default function Bookshelf({
-//   position = [0, 0, 0],
-//   rotation = [0, 0, 0],
-//   width = 6,
-//   height = 3,
-//   depth = 1,
-//   color = "#e2ac6f",
-//   shelves = 5,
-//   columns = 2,
-//   seed = 1,
-// }) {
-//   const frame = 0.18;
-//   const plank = 0.08;
-//   const baseHeight = 0.22;
-//   const innerWidth = width - frame * 2;
-//   const innerHeight = height - frame * 2;
-//   const colWidth = innerWidth / columns;
-//   const rowHeight = (innerHeight - plank * (shelves - 1)) / shelves;
-
-//   return (
-//     <group position={position} rotation={rotation} scale={1.5}>
-//       {/* Base débordante */}
-//       <RoundedBox
-//         args={[width + 0.3, baseHeight, depth + 0.3]}
-//         radius={0.08}
-//         smoothness={4}
-//         position={[0, baseHeight / 2, 0]}
-//         castShadow
-//         receiveShadow
-//       >
-//         <meshStandardMaterial color={color} roughness={0.55} />
-//       </RoundedBox>
-
-//       {/* Montants */}
-//       <RoundedBox
-//         args={[frame, height, depth]}
-//         radius={0.06}
-//         smoothness={4}
-//         position={[-width / 2 + frame / 2, baseHeight + height / 2, 0]}
-//         castShadow
-//       >
-//         <meshStandardMaterial color={color} roughness={0.55} />
-//       </RoundedBox>
-//       <RoundedBox
-//         args={[frame, height, depth]}
-//         radius={0.06}
-//         smoothness={4}
-//         position={[width / 2 - frame / 2, baseHeight + height / 2, 0]}
-//         castShadow
-//       >
-//         <meshStandardMaterial color={color} roughness={0.55} />
-//       </RoundedBox>
-
-//       {/* Séparateur central */}
-//       {columns > 1 &&
-//         Array.from({ length: columns - 1 }).map((_, i) => {
-//           const x = -innerWidth / 2 + colWidth * (i + 1);
-//           return (
-//             <RoundedBox
-//               key={i}
-//               args={[frame, height, depth]}
-//               radius={0.06}
-//               smoothness={4}
-//               position={[x, baseHeight + height / 2, 0]}
-//               castShadow
-//             >
-//               <meshStandardMaterial color={color} roughness={0.55} />
-//             </RoundedBox>
-//           );
-//         })}
-
-//       {/* Haut */}
-//       <RoundedBox
-//         args={[width, frame, depth]}
-//         radius={0.06}
-//         smoothness={4}
-//         position={[0, baseHeight + height - frame / 2, 0]}
-//         castShadow
-//       >
-//         <meshStandardMaterial color={color} roughness={0.55} />
-//       </RoundedBox>
-
-//       {/* Planches + livres */}
-//       {Array.from({ length: shelves }).map((_, row) => {
-//         const yTop = baseHeight + frame + rowHeight * (row + 1) + plank * row;
-//         const yBooks = baseHeight + frame + rowHeight * row + plank * row;
-
-//         return (
-//           <group key={row}>
-//             {row < shelves - 1 && (
-//               <RoundedBox
-//                 args={[innerWidth, plank, depth]}
-//                 radius={0.02}
-//                 smoothness={4}
-//                 position={[0, yTop, 0]}
-//                 castShadow
-//                 receiveShadow
-//               >
-//                 <meshStandardMaterial color={color} roughness={0.55} />
-//               </RoundedBox>
-//             )}
-//           </group>
-//         );
-//       })}
-//     </group>
-//   );
-// }
-import { useMemo } from "react";
-import { RoundedBox } from "@react-three/drei";
+import { useMemo, useState } from "react";
+import { RoundedBox, Html } from "@react-three/drei";
 
 const COLORS = [
   "#3b2a6b",
@@ -219,6 +69,9 @@ export default function Bookshelf({
   columns = 1,
   seed = 3,
   scale = [1, 2, 1],
+
+  onSelect, // ⬅️ ajouté : callback au clic
+  active = false,
 }) {
   const frame = 0.12; // montants + haut
   const plank = 0.07; // planches
@@ -320,8 +173,31 @@ export default function Bookshelf({
 
   const wood = <meshStandardMaterial color={color} roughness={0.55} />;
 
+  const [open, setOpen] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+  const isOpen = active || open;
   return (
-    <group position={position} rotation={rotation} scale={scale}>
+    // <group position={position} rotation={rotation} scale={scale}>
+    <group
+      position={position}
+      rotation={rotation}
+      scale={scale}
+      onClick={(e) => {
+        e.stopPropagation();
+        setOpen((v) => !v);
+        onSelect?.();
+      }}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        setHovered(true);
+        document.body.style.cursor = "pointer";
+      }}
+      onPointerOut={() => {
+        setHovered(false);
+        document.body.style.cursor = "auto";
+      }}
+    >
       {/* Socle */}
       <RoundedBox
         args={[width + 0.2, baseH, depth + 0.2]}
@@ -419,6 +295,100 @@ export default function Bookshelf({
         ) : (
           <Book key={i} {...it} />
         ),
+      )}
+
+      {isOpen && (
+        <Html
+          position={[2, height * 0.01 + 2.6, 4]}
+          center
+          distanceFactor={10}
+          zIndexRange={[20, 0]}
+          style={{ pointerEvents: "none" }}
+        >
+          <div
+            style={{
+              position: "relative",
+              fontFamily: "system-ui, sans-serif",
+            }}
+          >
+            <div
+              style={{
+                width: 340,
+                padding: "16px 20px",
+                borderRadius: 24,
+                background: "rgba(255,255,255,0.98)",
+                border: "2px solid #1b1b22",
+                boxShadow: "0 12px 30px rgba(0,0,0,0.25)",
+                color: "#1b1f27",
+                position: "relative",
+              }}
+            >
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#8a3b12" }}>
+                Mobile App — Professional Project
+              </div>
+
+              <div style={{ fontSize: 12.5, marginTop: 8, lineHeight: 1.45 }}>
+                Contributed to the development of a company mobile application
+                using <b>Flutter</b>. The app aims to improve user experience
+                and integrate mobile features with backend services. Screenshots
+                and source code cannot be shared due to confidentiality.
+              </div>
+
+              <div style={{ fontSize: 12, marginTop: 10, color: "#555" }}>
+                <b>Role</b> — Mobile Developer
+              </div>
+
+              <div
+                style={{
+                  fontSize: 11.5,
+                  marginTop: 6,
+                  color: "#3a2a5a",
+                  fontWeight: 600,
+                }}
+              >
+                Flutter • REST API • Mobile UI Development
+              </div>
+
+              {/* Petits ronds de la bulle */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: -6,
+                  bottom: -14,
+                  width: 16,
+                  height: 16,
+                  borderRadius: "50%",
+                  background: "#fff",
+                  border: "2px solid #1b1b22",
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  left: -18,
+                  bottom: -30,
+                  width: 10,
+                  height: 10,
+                  borderRadius: "50%",
+                  background: "#fff",
+                  border: "2px solid #1b1b22",
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  left: -28,
+                  bottom: -44,
+                  width: 6,
+                  height: 6,
+                  borderRadius: "50%",
+                  background: "#fff",
+                  border: "2px solid #1b1b22",
+                }}
+              />
+            </div>
+          </div>
+        </Html>
       )}
     </group>
   );

@@ -12,6 +12,10 @@ import { useLoader } from "@react-three/fiber";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 import { MTLLoader } from "three/addons/loaders/MTLLoader.js";
 import ProfilePanel from "../about/ProfilePanel";
+import Basketball from "../about/Basketball";
+
+import { useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
 
 export default function AboutSection({ position, scale }) {
   const materials = useLoader(MTLLoader, "/models/fat_cat_obj.mtl");
@@ -22,7 +26,15 @@ export default function AboutSection({ position, scale }) {
     loader.setMaterials(materials);
   });
 
-  const DESK_TOP = 3.75; // hauteur du dessus du plateau (monde)
+  const [hovered, setHovered] = useState(false);
+  const wrapperRef = useRef();
+
+  useFrame(() => {
+    if (!wrapperRef.current) return;
+    const target = hovered ? 0.15 : 0.12;
+    const s = wrapperRef.current.scale.x;
+    wrapperRef.current.scale.setScalar(s + (target - s) * 0.15);
+  });
 
   return (
     <Section position={position}>
@@ -38,13 +50,8 @@ export default function AboutSection({ position, scale }) {
       <Window scale={1.7} position={[6, 6, -13.7]} />
 
       <ProfilePanel
-        // scale={[0.5, 0.5, 0.01]}
-        // position={[-8.8, 4.5, -1.4]}
-        // rotation={[0, Math.PI / 2, 0]}
         position={[-8.7, 4.5, -1.4]}
         rotation={[0, Math.PI / 2, 0]}
-        // scale={[0.4, 0.4, 0.1]}
-        // avatarUrl={me}
         avatarFocus={[5, 0.1, 0.4]}
         scale={[1.7, 1.7, 1]}
       />
@@ -66,11 +73,55 @@ export default function AboutSection({ position, scale }) {
         <DeskItems position={[0, 4.2, 0]} />
       </group>
 
-      <primitive
+      {/* <primitive
         object={obj}
         position={[-6, 2, 14]}
         scale={0.12}
         rotation={[0, Math.PI, 0]}
+        onClick={(e) => {
+          e.stopPropagation();
+          window.open(
+            "https://cat-blog-kappa.vercel.app/",
+            "_blank",
+            "noopener,noreferrer",
+          );
+        }}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          document.body.style.cursor = "pointer";
+        }}
+        onPointerOut={() => {
+          document.body.style.cursor = "auto";
+        }}
+      /> */}
+      <group
+        ref={wrapperRef}
+        position={[-7, 2, 14]}
+        onClick={(e) => {
+          e.stopPropagation();
+          window.open(
+            "https://cat-blog-kappa.vercel.app/",
+            "_blank",
+            "noopener,noreferrer",
+          );
+        }}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          setHovered(true);
+          document.body.style.cursor = "pointer";
+        }}
+        onPointerOut={() => {
+          setHovered(false);
+          document.body.style.cursor = "auto";
+        }}
+      >
+        <primitive object={obj} rotation={[0, Math.PI, 0]} scale={0.8} />
+      </group>
+
+      <Basketball
+        position={[8, 1, 8]}
+        onBallClick={() => console.log("clic !")}
+        scale={1.5}
       />
       {/* <CatBed position={[1, 10, 1]} /> */}
       <EffectComposer>

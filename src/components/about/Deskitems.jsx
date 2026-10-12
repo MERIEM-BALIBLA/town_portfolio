@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import * as THREE from "three";
 import { RoundedBox } from "@react-three/drei";
+import { useState } from "react";
 
 /* =====================================================================
    POSITION DE CHAQUE OBJET SUR LE BUREAU (unités internes du bureau)
@@ -22,76 +23,238 @@ export const DEFAULT_LAYOUT = {
 };
 
 /* ---------- Écran avec du code ---------- */
+// function useCodeTexture() {
+//   return useMemo(() => {
+//     const c = document.createElement("canvas");
+//     c.width = 512;
+//     c.height = 288;
+//     const g = c.getContext("2d");
+//     g.fillStyle = "#1a1530";
+//     g.fillRect(0, 0, 512, 288);
+//     g.fillStyle = "#231c40";
+//     g.fillRect(0, 0, 60, 288);
+//     g.fillStyle = "#2a2250";
+//     g.fillRect(0, 0, 512, 16);
+//     let s = 7;
+//     const rnd = () => {
+//       s = (s * 16807) % 2147483647;
+//       return s / 2147483647;
+//     };
+//     const cols = ["#8b7bff", "#4dd6c1", "#ff8fb1", "#f7d13a", "#9aa4d6"];
+//     for (let line = 0; line < 20; line++) {
+//       let x = 76 + Math.floor(rnd() * 4) * 18;
+//       const y = 30 + line * 12;
+//       const n = 2 + Math.floor(rnd() * 4);
+//       for (let i = 0; i < n; i++) {
+//         const w = 18 + rnd() * 60;
+//         g.fillStyle = cols[Math.floor(rnd() * cols.length)];
+//         g.fillRect(x, y, w, 5);
+//         x += w + 8;
+//       }
+//     }
+//     for (let i = 0; i < 12; i++) {
+//       g.fillStyle = "#5a4d99";
+//       g.fillRect(10, 28 + i * 14, 20 + (i % 3) * 8, 4);
+//     }
+//     const t = new THREE.CanvasTexture(c);
+//     t.colorSpace = THREE.SRGBColorSpace;
+//     return t;
+//   }, []);
+// }
 function useCodeTexture() {
   return useMemo(() => {
-    const c = document.createElement("canvas");
-    c.width = 512;
-    c.height = 288;
-    const g = c.getContext("2d");
-    g.fillStyle = "#1a1530";
-    g.fillRect(0, 0, 512, 288);
-    g.fillStyle = "#231c40";
-    g.fillRect(0, 0, 60, 288);
-    g.fillStyle = "#2a2250";
-    g.fillRect(0, 0, 512, 16);
-    let s = 7;
-    const rnd = () => {
-      s = (s * 16807) % 2147483647;
-      return s / 2147483647;
-    };
-    const cols = ["#8b7bff", "#4dd6c1", "#ff8fb1", "#f7d13a", "#9aa4d6"];
-    for (let line = 0; line < 20; line++) {
-      let x = 76 + Math.floor(rnd() * 4) * 18;
-      const y = 30 + line * 12;
-      const n = 2 + Math.floor(rnd() * 4);
-      for (let i = 0; i < n; i++) {
-        const w = 18 + rnd() * 60;
-        g.fillStyle = cols[Math.floor(rnd() * cols.length)];
-        g.fillRect(x, y, w, 5);
-        x += w + 8;
-      }
+    const canvas = document.createElement("canvas");
+    canvas.width = 1024;
+    canvas.height = 576;
+    const ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "#0d0d12";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Barre
+    ctx.fillStyle = "#1b1b22";
+    ctx.fillRect(0, 0, canvas.width, 48);
+
+    // Lignes de "code"
+    const colors = ["#ff79c6", "#8be9fd", "#50fa7b", "#f1fa8c", "#bd93f9"];
+    for (let i = 0; i < 20; i++) {
+      const y = 80 + i * 24;
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.fillRect(60, y, 100 + Math.random() * 700, 10);
     }
-    for (let i = 0; i < 12; i++) {
-      g.fillStyle = "#5a4d99";
-      g.fillRect(10, 28 + i * 14, 20 + (i % 3) * 8, 4);
-    }
-    const t = new THREE.CanvasTexture(c);
-    t.colorSpace = THREE.SRGBColorSpace;
-    return t;
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
   }, []);
 }
+function useWelcomeTexture() {
+  return useMemo(() => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 1024;
+    canvas.height = 576;
+
+    const ctx = canvas.getContext("2d");
+
+    // Fond sombre
+    ctx.fillStyle = "#0d0d12";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Dégradé violet en fond
+    const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    grad.addColorStop(0, "#1b0f2b");
+    grad.addColorStop(1, "#0d0d12");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Barre de fenêtre style "code editor"
+    ctx.fillStyle = "#1b1b22";
+    ctx.fillRect(0, 0, canvas.width, 48);
+    ctx.fillStyle = "#ff5f56";
+    ctx.beginPath();
+    ctx.arc(28, 24, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#ffbd2e";
+    ctx.beginPath();
+    ctx.arc(56, 24, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#27c93f";
+    ctx.beginPath();
+    ctx.arc(84, 24, 8, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Texte principal
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 72px 'Segoe UI', system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("Welcome to my", canvas.width / 2, canvas.height / 2 - 60);
+
+    // Deuxième ligne avec glow violet
+    ctx.shadowColor = "#9d7bff";
+    ctx.shadowBlur = 30;
+    ctx.fillStyle = "#c4a3ff";
+    ctx.fillText("3D Portfolio", canvas.width / 2, canvas.height / 2 + 40);
+
+    // Reset shadow
+    ctx.shadowBlur = 0;
+
+    // Curseur clignotant
+    ctx.fillStyle = "#c4a3ff";
+    ctx.fillRect(canvas.width / 2 + 220, canvas.height / 2 + 70, 8, 40);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
+  }, []);
+}
+// function Monitor() {
+//   const tex = useCodeTexture();
+//   return (
+//     <group scale={2}>
+//       <mesh position={[0, 0.015, 0]} castShadow>
+//         <boxGeometry args={[0.5, 0.03, 0.3]} />
+//         <meshStandardMaterial color="#1b1b22" roughness={0.5} />
+//       </mesh>
+//       <mesh position={[0, 0.2, -0.02]} castShadow>
+//         <boxGeometry args={[0.1, 0.35, 0.05]} />
+//         <meshStandardMaterial color="#1b1b22" roughness={0.5} />
+//       </mesh>
+//       <group position={[0, 0.72, 0]}>
+//         <RoundedBox
+//           args={[1.4, 0.82, 0.06]}
+//           radius={0.02}
+//           smoothness={3}
+//           castShadow
+//         >
+//           <meshStandardMaterial color="#14141b" roughness={0.4} />
+//         </RoundedBox>
+//         <mesh position={[0, 0, 0.032]}>
+//           <planeGeometry args={[1.3, 0.73]} />
+//           <meshStandardMaterial
+//             map={tex}
+//             emissiveMap={tex}
+//             emissive="#ffffff"
+//             emissiveIntensity={0.9}
+//             toneMapped={false}
+//           />
+//         </mesh>
+//         <pointLight
+//           position={[0, 0, 0.6]}
+//           color="#9d7bff"
+//           intensity={0.6}
+//           distance={3}
+//         />
+//       </group>
+//     </group>
+//   );
+// }
 
 function Monitor() {
-  const tex = useCodeTexture();
+  const codeTex = useCodeTexture();
+  const welcomeTex = useWelcomeTexture();
+  const [clicked, setClicked] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+  const activeTex = clicked ? welcomeTex : codeTex;
+
   return (
     <group scale={2}>
+      {/* pied */}
       <mesh position={[0, 0.015, 0]} castShadow>
         <boxGeometry args={[0.5, 0.03, 0.3]} />
         <meshStandardMaterial color="#1b1b22" roughness={0.5} />
       </mesh>
+      {/* tige */}
       <mesh position={[0, 0.2, -0.02]} castShadow>
         <boxGeometry args={[0.1, 0.35, 0.05]} />
         <meshStandardMaterial color="#1b1b22" roughness={0.5} />
       </mesh>
-      <group position={[0, 0.72, 0]}>
+
+      {/* écran (cliquable) */}
+      <group
+        position={[0, 0.72, 0]}
+        onClick={(e) => {
+          e.stopPropagation();
+          setClicked(true);
+        }}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          setHovered(true);
+          document.body.style.cursor = "pointer";
+        }}
+        onPointerOut={() => {
+          setHovered(false);
+          document.body.style.cursor = "auto";
+        }}
+      >
         <RoundedBox
           args={[1.4, 0.82, 0.06]}
           radius={0.02}
           smoothness={3}
           castShadow
         >
-          <meshStandardMaterial color="#14141b" roughness={0.4} />
+          <meshStandardMaterial
+            color={hovered ? "#1e1e2b" : "#14141b"}
+            roughness={0.4}
+            emissive={hovered ? "#3a2a5a" : "#000000"}
+            emissiveIntensity={hovered ? 0.4 : 0}
+          />
         </RoundedBox>
+
+        {/* écran */}
         <mesh position={[0, 0, 0.032]}>
           <planeGeometry args={[1.3, 0.73]} />
           <meshStandardMaterial
-            map={tex}
-            emissiveMap={tex}
+            map={activeTex}
+            emissiveMap={activeTex}
             emissive="#ffffff"
             emissiveIntensity={0.9}
             toneMapped={false}
           />
         </mesh>
+
+        {/* lumière violette de l'écran */}
         <pointLight
           position={[0, 0, 0.6]}
           color="#9d7bff"
@@ -102,7 +265,6 @@ function Monitor() {
     </group>
   );
 }
-
 function Keyboard() {
   return (
     <group scale={2}>

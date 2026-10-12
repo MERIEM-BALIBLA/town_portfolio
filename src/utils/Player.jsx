@@ -313,11 +313,11 @@ export default function Player({ playerRef, focusRef, start = [0, 0, 0] }) {
   return (
     <group ref={playerRef} position={start}>
       <mesh position={[0, 0.9, 0]}>
-        <capsuleGeometry args={[0.4, 1, 4, 8]} />
-        <meshStandardMaterial color="#e63946" />
+        <capsuleGeometry args={[0.6, 1, 4, 8]} />
+        <meshStandardMaterial color="#dc98e1" />
       </mesh>
-      <mesh position={[0, 1.4, 0.4]}>
-        <boxGeometry args={[0.3, 0.3, 0.3]} />
+      <mesh position={[0, 1.4, 0.5]}>
+        <boxGeometry args={[0.6, 0.3, 0.3]} />
         <meshStandardMaterial color="#ffffff" />
       </mesh>
     </group>

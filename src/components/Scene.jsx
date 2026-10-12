@@ -6,6 +6,11 @@ import { stations } from "../assets/json/stations";
 import Station from "./Station";
 import Section from "./Section";
 import AboutSection from "./sections/AboutSection";
+import ExperienceSection from "./sections/ExperienceSection";
+import FormationSection from "./sections/FormationSection";
+import ProjectSecion from "./sections/ProjectSection";
+import SkillsSection from "./sections/SkillsSection";
+import ContactSection from "./sections/ContactSection";
 
 export default function Scene() {
   const playerRef = useRef();
@@ -29,19 +34,19 @@ export default function Scene() {
       <Road position={[14, 0, 0]} rotation={Math.PI / 2} />
 
       <AboutSection position={[-28, -21]} />
-      <Section position={[0, -21]} />
-      <Section position={[28, -21]} />
+      <ContactSection position={[0, -21]} />
+      <SkillsSection position={[28, -21]} />
 
-      <Section position={[-28, 21]} />
-      <Section position={[0, 21]} />
-      <Section position={[28, 21]} />
+      <ExperienceSection position={[-28, 21]} />
+      <FormationSection position={[0, 21]} />
+      <ProjectSecion position={[28, 21]} />
 
       {stations.map((s) => (
         <Station key={s.id} {...s} playerRef={playerRef} focusRef={focusRef} />
       ))}
 
-      <Player playerRef={playerRef} focusRef={focusRef} start={[0, 0, 0]} />
-      <axesHelper args={[8]} />
+      <Player playerRef={playerRef} focusRef={focusRef} start={[0, 0.1, 0]} />
+      {/* <axesHelper args={[8]} /> */}
     </>
   );
 }

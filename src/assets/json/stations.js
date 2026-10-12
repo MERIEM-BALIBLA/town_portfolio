@@ -1,31 +1,54 @@
-const maisons = { name: "Maisons", description: "Le quartier résidentiel." };
-const marche = { name: "Marché", description: "Le centre commercial." };
-const ferme = { name: "Ferme", description: "Les champs et la grange." };
-const mairie = { name: "Mairie", description: "Le centre administratif." };
-const parc = { name: "Parc", description: "Le parc et les arbres." };
-const port = { name: "Port", description: "Le port du village." };
+const profile = {
+  name: "About Me",
+  description: "Discover my background and my journey as a developer.",
+};
 
-// Sur la route horizontale (z = 0), une station par colonne de sections
+const skills = {
+  name: "Skills",
+  description: "Explore my technical skills, tools, and technologies.",
+};
+
+const contact = {
+  name: "Contact",
+  description: "Let's connect and discuss.",
+};
+
+const experience = {
+  name: "Experience",
+  description: "Explore my professional journey and work experience.",
+};
+
+const education = {
+  name: "Education",
+  description: "Discover my academic background and technical training.",
+};
+
+const project = {
+  name: "Projects",
+  description: "Explore some of my projects.",
+};
+
+// Along the horizontal road (z = 0), one station per section column
 export const stations = [
   {
     id: 1,
-    title: "Station ouest",
+    title: "West Station",
     position: [-28, 0.05, 0],
-    north: maisons,
-    south: mairie,
+    north: profile,
+    south: experience,
   },
   {
     id: 2,
-    title: "Station centre",
+    title: "Central Station",
     position: [0, 0.05, 0],
-    north: marche,
-    south: parc,
+    north: contact,
+    south: education,
   },
   {
     id: 3,
-    title: "Station est",
+    title: "East Station",
     position: [28, 0.05, 0],
-    north: ferme,
-    south: port,
+    north: skills,
+    south: project,
   },
 ];
