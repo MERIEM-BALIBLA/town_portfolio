@@ -121,12 +121,13 @@ export default function ExperienceSection({ position }) {
             object={dotenet}
             scale={0.01}
             rotation={[0, Math.PI / 2, 0]}
+            position={[-1.95, 0, 1]}
           />
           <primitive
             object={react}
             scale={0.01}
             rotation={[0, Math.PI / 2, 0]}
-            position={[0.7, -1, 0]}
+            position={[-1.95, -1, 0]}
           />
         </group>
 
