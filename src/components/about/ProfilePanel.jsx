@@ -244,8 +244,8 @@ export default function ProfilePanel({
   avatarUrl = avatar,
   avatarFocus = [0.5, 0.5], // [horizontal, vertical] du point à centrer dans le cercle
   name = "Meriem Balibla",
-  role = "Ingénieure développeuse spécialisée dans le développement Web et Mobile.",
-  bio = "Bonjour, je suis Meriem, développeuse Full-Stack avec une formation en ingénierie mécatronique, passionnée par la création d'applications web et mobiles modernes en utilisant des technologies comme Java et Angular.",
+  role = "Software Engineer specializing in Web and Mobile Development",
+  bio = "Hello, I'm BALIBLA Meriem, a Full-Stack Developer with a background in Mechatronics Engineering, passionate about building modern web and mobile applications using technologies such as Java and Angular.",
   showCode = true,
 }) {
   const logoSize = 58;

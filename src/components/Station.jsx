@@ -221,13 +221,13 @@ export default function Station({
               <>
                 <strong>{current.name}</strong>
                 <div style={{ marginTop: 4 }}>{current.description}</div>
-                <div style={{ opacity: 0.6, marginTop: 8 }}>↓ pour sortir</div>
+                <div style={{ opacity: 0.6, marginTop: 8 }}>↓ Exit</div>
               </>
             ) : menuOpen ? (
               // --- Menu de choix ---
               <>
                 <div style={{ marginBottom: 6, opacity: 0.7 }}>
-                  Choisir une direction
+                  Choose a direction{" "}
                 </div>
                 <div
                   style={{
@@ -251,9 +251,7 @@ export default function Station({
               // --- Invite ---
               <>
                 <strong style={{ display: "block" }}>{title}</strong>
-                <div style={{ opacity: 0.6, marginTop: 6 }}>
-                  Appuyez sur Entrée
-                </div>
+                <div style={{ opacity: 0.6, marginTop: 6 }}>Press Enter </div>
               </>
             )}
           </div>

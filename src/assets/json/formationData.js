@@ -5,8 +5,9 @@ export const FORMATIONS = [
     school: "EST Safi",
     period: "2018 – 2021",
     place: "Safi",
-    title: "DUT Génie Industriel et Maintenance",
-    detail: "Option Électromécanique",
+    title:
+      "University Diploma of Technology in Industrial Engineering and Maintenance",
+    detail: "Electromechanics Specialization",
   },
   {
     id: "licence",
@@ -14,7 +15,7 @@ export const FORMATIONS = [
     school: "EST Safi",
     period: "2022 – 2023",
     place: "Safi",
-    title: "Licence professionnelle en mécatronique",
+    title: "Professional Bachelor's Degree in Mechatronics",
     detail: "EST Safi",
   },
   {
@@ -23,8 +24,8 @@ export const FORMATIONS = [
     school: "OCP Safi",
     period: "2023 – 2025",
     place: "Safi",
-    title: "Hygiène, Sécurité et Environnement (HSE)",
-    detail: "Formation",
+    title: "Health, Safety and Environment (HSE)",
+    detail: "Training",
   },
   {
     id: "youcode",
@@ -32,7 +33,7 @@ export const FORMATIONS = [
     school: "UM6P / YouCode",
     period: "2023 – 2025",
     place: "Youssoufia",
-    title: "Développement Web puis Full-Stack",
-    detail: "1re année PHP & Laravel · 2e année Java & Angular",
+    title: "Web Development and Full-Stack Development",
+    detail: "Year 1: PHP & Laravel · Year 2: Java & Angular",
   },
 ];
