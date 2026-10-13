@@ -123,7 +123,7 @@ const CARDS = [
  */
 export default function PortfolioFolder({
   label = "PORTFOLIO",
-  subtitle = "Projets & réalisations",
+  subtitle = "Projects & Achievements",
   color = "#6d3fd1",
   floatAmplitude = 0.06,
   speed = 1,
