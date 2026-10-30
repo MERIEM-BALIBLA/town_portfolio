@@ -53,7 +53,6 @@ function Lamp({ position }) {
         <cylinderGeometry args={[0.1, 0.12, 0.05, 16]} />
         <meshStandardMaterial color="#5a3d2b" roughness={0.6} />
       </mesh>
-      <pointLight color="#ffb866" intensity={0.8} distance={3} />
     </group>
   );
 }

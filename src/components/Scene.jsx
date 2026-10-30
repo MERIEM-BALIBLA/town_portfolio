@@ -51,18 +51,21 @@
 //   );
 // }
 import { OrbitControls } from "@react-three/drei";
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import Road from "./Road";
 import Player from "../utils/Player";
-import { useRef } from "react";
+import { lazy, useRef } from "react";
 import { stations } from "../assets/json/stations";
 import Station from "./Station";
 import Reveal from "./Reveal";
-import AboutSection from "./sections/AboutSection";
-import ExperienceSection from "./sections/ExperienceSection";
-import FormationSection from "./sections/FormationSection";
-import ProjectSecion from "./sections/ProjectSection";
-import SkillsSection from "./sections/SkillsSection";
-import ContactSection from "./sections/ContactSection";
+import InViewSection from "./InViewSection";
+
+const AboutSection = lazy(() => import("./sections/AboutSection"));
+const ExperienceSection = lazy(() => import("./sections/ExperienceSection"));
+const FormationSection = lazy(() => import("./sections/FormationSection"));
+const ProjectSecion = lazy(() => import("./sections/ProjectSection"));
+const SkillsSection = lazy(() => import("./sections/SkillsSection"));
+const ContactSection = lazy(() => import("./sections/ContactSection"));
 
 export default function Scene({ started }) {
   const playerRef = useRef();
@@ -88,23 +91,44 @@ export default function Scene({ started }) {
       </Reveal>
 
       <Reveal active={started} delay={0.0}>
-        <AboutSection position={[-28, -21]} />
+        <InViewSection center={[-28, -21]}>
+          <AboutSection position={[-28, -21]} />
+        </InViewSection>
       </Reveal>
       <Reveal active={started} delay={0.1}>
-        <ContactSection position={[0, -21]} />
+        <InViewSection center={[0, -21]}>
+          <ContactSection position={[0, -21]} />
+        </InViewSection>
       </Reveal>
       <Reveal active={started} delay={0.2}>
-        <SkillsSection position={[28, -21]} />
+        <InViewSection center={[28, -21]}>
+          <SkillsSection position={[28, -21]} />
+        </InViewSection>
       </Reveal>
       <Reveal active={started} delay={0.3}>
-        <ExperienceSection position={[-28, 21]} />
+        <InViewSection center={[-28, 21]}>
+          <ExperienceSection position={[-28, 21]} />
+        </InViewSection>
       </Reveal>
       <Reveal active={started} delay={0.4}>
-        <FormationSection position={[0, 21]} />
+        <InViewSection center={[0, 21]}>
+          <FormationSection position={[0, 21]} />
+        </InViewSection>
       </Reveal>
       <Reveal active={started} delay={0.5}>
-        <ProjectSecion position={[28, 21]} />
+        <InViewSection center={[28, 21]}>
+          <ProjectSecion position={[28, 21]} />
+        </InViewSection>
       </Reveal>
+
+      <EffectComposer multisampling={0}>
+        <Bloom
+          intensity={1.5}
+          luminanceThreshold={0.2}
+          luminanceSmoothing={0.9}
+          mipmapBlur
+        />
+      </EffectComposer>
 
       {started && (
         <>

@@ -62,14 +62,11 @@ function Rim({ x, color }) {
         <FrameMaterial color={color} />
       </mesh>
       <mesh geometry={lensGeo}>
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           color="#cfe6f5"
           roughness={0.02}
-          transmission={0.95}
-          thickness={0.1}
-          ior={1.45}
           transparent
-          opacity={0.4}
+          opacity={0.3}
           side={THREE.DoubleSide}
         />
       </mesh>

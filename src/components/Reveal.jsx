@@ -14,7 +14,7 @@ export default function Reveal({ children, delay = 0, active = false }) {
   });
 
   return (
-    <group ref={ref} scale={0.001}>
+    <group ref={ref} scale={0.001} visible={active}>
       {children}
     </group>
   );

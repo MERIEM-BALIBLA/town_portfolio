@@ -253,14 +253,6 @@ function Monitor() {
             toneMapped={false}
           />
         </mesh>
-
-        {/* lumière violette de l'écran */}
-        <pointLight
-          position={[0, 0, 0.6]}
-          color="#9d7bff"
-          intensity={0.6}
-          distance={3}
-        />
       </group>
     </group>
   );
@@ -393,12 +385,6 @@ function DeskLamp() {
           toneMapped={false}
         />
       </mesh>
-      <pointLight
-        position={[0, 0.42, 0]}
-        color="#ffb866"
-        intensity={1}
-        distance={4}
-      />
     </group>
   );
 }

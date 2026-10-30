@@ -1,9 +1,22 @@
 import { Suspense, useEffect, useState } from "react";
-import { Canvas } from "@react-three/fiber";
-import { Preload, Sparkles } from "@react-three/drei";
+import { Canvas, events as createPointerEvents } from "@react-three/fiber";
+import { PerformanceMonitor, Sparkles } from "@react-three/drei";
 import Scene from "./components/Scene";
 import Intro from "./components/Intro";
 import WorldIntro from "./components/WorldIntro";
+
+// Three.js laisse cliquables les objets masqués : on les ignore ici.
+function isVisible(object) {
+  for (let o = object; o; o = o.parent) if (!o.visible) return false;
+  return true;
+}
+
+function pointerEvents(store) {
+  return {
+    ...createPointerEvents(store),
+    filter: (hits) => hits.filter((hit) => isVisible(hit.object)),
+  };
+}
 
 function Ready({ onReady }) {
   useEffect(() => {
@@ -16,6 +29,7 @@ function Ready({ onReady }) {
 export default function App() {
   const [ready, setReady] = useState(false);
   const [phase, setPhase] = useState("intro"); // intro -> entering -> scene
+  const [dpr, setDpr] = useState(1.5);
 
   // NOUVEAU : Cette condition devient vraie dès que l'on quitte l'intro
   const isEnteringOrScene = phase !== "intro";
@@ -57,7 +71,19 @@ export default function App() {
         }}
       />
 
-      <Canvas camera={{ position: [0, 9, 17], fov: 50 }} gl={{ alpha: true }}>
+      <Canvas
+        dpr={dpr}
+        events={pointerEvents}
+        camera={{ position: [0, 9, 17], fov: 50 }}
+        gl={{ alpha: true }}
+      >
+        <PerformanceMonitor
+          flipflops={3}
+          onDecline={() => setDpr(1)}
+          onIncline={() => setDpr(1.5)}
+          onFallback={() => setDpr(1)}
+        />
+
         {!inScene && (
           <WorldIntro phase={phase} onArrived={() => setPhase("scene")} />
         )}
@@ -72,7 +98,6 @@ export default function App() {
             color="#e8d5ff"
           />
 
-          <Preload all />
           <Ready onReady={() => setReady(true)} />
         </Suspense>
       </Canvas>

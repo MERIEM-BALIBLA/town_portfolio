@@ -1,7 +1,7 @@
 import { Component, Suspense, useMemo } from "react";
 import * as THREE from "three";
 import { Text, useTexture } from "@react-three/drei";
-import avatar from "../../assets/image/me.jpg"; // depuis components/about/
+import avatar from "../../assets/image/me.jpg?w=512&format=webp"; // depuis components/about/
 
 const ICON_BASE = "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/";
 const TECHS = [

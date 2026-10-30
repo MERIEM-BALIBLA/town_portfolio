@@ -1,6 +1,5 @@
 import LedPlatform from "../about/LedPlatform";
 import Section from "../Section";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import Desk from "../about/Desk";
 import Plant from "../about/Plant";
 import Window from "../about/Window";
@@ -47,7 +46,7 @@ export default function AboutSection({ position, scale }) {
         <boxGeometry args={[0.5, 8, 28]} />
         <meshStandardMaterial color="#e8c1e2" />
       </mesh>
-      <Window scale={1.7} position={[6, 6, -13.7]} />
+      <Window scale={1.7} position={[6, 6, -13.7]} light={false} />
 
       <ProfilePanel
         position={[-8.7, 4.5, -1.4]}
@@ -124,15 +123,6 @@ export default function AboutSection({ position, scale }) {
         scale={1.5}
       />
       {/* <CatBed position={[1, 10, 1]} /> */}
-      <EffectComposer>
-        <Bloom
-          intensity={1.5}
-          luminanceThreshold={0.2}
-          luminanceSmoothing={0.9}
-          mipmapBlur
-        />
-      </EffectComposer>
-
       <LedPlatform
         width={23}
         depth={35}
