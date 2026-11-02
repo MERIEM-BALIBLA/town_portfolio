@@ -15,6 +15,7 @@ export default function FormationSection({ position }) {
   // useGLTF est un hook : il doit être appelé DANS le composant
   const { scene: clock } = useGLTF("/models/clock.glb");
   const [selected, setSelected] = useState(null);
+  const current = FORMATIONS.find((f) => f.id === selected);
 
   return (
     <Section position={position}>
@@ -27,7 +28,12 @@ export default function FormationSection({ position }) {
         position={[0, 3.5, 13.7]}
         rotation={[0, Math.PI, 0]}
         scale={3}
-        text="Developer Full Stack Java/Angular, Web Developer PHP/Laravel, Mechatronics, Electromechanics, Mechanics"
+        text={
+          current
+            ? [current.school, current.title, current.detail]
+            : "Developer Full Stack Java/Angular, Web Developer PHP/Laravel, Mechatronics, Electromechanics, Mechanics"
+        }
+        subtitle={current ? `${current.period} · ${current.place}` : ""}
       />
 
       <primitive
@@ -49,7 +55,6 @@ export default function FormationSection({ position }) {
           key={f.id}
           scale={1.5}
           position={f.position}
-          data={f}
           active={selected === f.id}
           onSelect={() => setSelected((cur) => (cur === f.id ? null : f.id))}
         />

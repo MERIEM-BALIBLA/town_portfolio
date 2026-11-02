@@ -113,8 +113,7 @@ function makeBoardTexture(text, subtitle, aspect, maxFont) {
     ctx.fill();
   }
 
-  const lines = text
-    .split(",")
+  const lines = (Array.isArray(text) ? text : text.split(","))
     .map((l) => l.trim())
     .filter(Boolean);
 
@@ -127,19 +126,18 @@ function makeBoardTexture(text, subtitle, aspect, maxFont) {
 
   // 1) taille max selon la hauteur disponible
   let size = Math.min(maxFont, availH / (lines.length * lineGap));
-  // 2) réduit encore si une ligne dépasse la largeur
-  ctx.font = `bold ${size}px ${FONT}`;
-  const widest = Math.max(...lines.map((l) => ctx.measureText(l).width), 1);
-  if (widest > availW) size *= availW / widest;
-
   ctx.fillStyle = "#f4f1e6";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.font = `bold ${size}px ${FONT}`;
 
   const blockH = lines.length * size * lineGap;
   const startY = padY + (availH - blockH) / 2 + (size * lineGap) / 2;
   lines.forEach((line, i) => {
+    // 2) chaque ligne est réduite seulement si elle dépasse la largeur
+    ctx.font = `bold ${size}px ${FONT}`;
+    const lw = ctx.measureText(line).width;
+    const lineSize = lw > availW ? size * (availW / lw) : size;
+    ctx.font = `bold ${lineSize}px ${FONT}`;
     ctx.fillText(line, w / 2, startY + i * size * lineGap);
   });
 
@@ -155,7 +153,7 @@ function makeBoardTexture(text, subtitle, aspect, maxFont) {
 }
 
 // Tableau mural. Le point (0,0,0) est le centre du tableau, face vers +z.
-// text : éléments séparés par des virgules, une ligne chacun.
+// text : tableau de lignes, ou éléments séparés par des virgules (une ligne chacun).
 export default function Blackboard({
   width = 4,
   height = 1.4,
@@ -167,7 +165,8 @@ export default function Blackboard({
 }) {
   const tex = useMemo(
     () => makeBoardTexture(text, subtitle, width / height, maxFont),
-    [text, subtitle, width, height, maxFont],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [Array.isArray(text) ? text.join("\n") : text, subtitle, width, height, maxFont],
   );
   const f = 0.06; // épaisseur du cadre
 
