@@ -4,6 +4,7 @@ import { PerformanceMonitor, Sparkles } from "@react-three/drei";
 import Scene from "./components/Scene";
 import Intro from "./components/Intro";
 import WorldIntro from "./components/WorldIntro";
+import MusicPlayer from "./components/MusicPlayer";
 
 // Three.js laisse cliquables les objets masqués : on les ignore ici.
 function isVisible(object) {
@@ -54,6 +55,8 @@ export default function App() {
           onStart={() => setPhase("entering")}
         />
       )}
+
+      <MusicPlayer autoStart={isEnteringOrScene} />
 
       {/* Fondu blanc quand on entre dans la maison */}
       <div
