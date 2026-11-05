@@ -5,6 +5,13 @@ import Scene from "./components/Scene";
 import Intro from "./components/Intro";
 import WorldIntro from "./components/WorldIntro";
 import MusicPlayer from "./components/MusicPlayer";
+import NavMenu from "./components/NavMenu";
+
+// Téléphone / tablette : on allège le rendu
+const IS_MOBILE =
+  typeof window !== "undefined" &&
+  (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768);
+const MAX_DPR = IS_MOBILE ? 1 : 1.5;
 
 // Three.js laisse cliquables les objets masqués : on les ignore ici.
 function isVisible(object) {
@@ -30,7 +37,7 @@ function Ready({ onReady }) {
 export default function App() {
   const [ready, setReady] = useState(false);
   const [phase, setPhase] = useState("intro"); // intro -> entering -> scene
-  const [dpr, setDpr] = useState(1.5);
+  const [dpr, setDpr] = useState(MAX_DPR);
 
   // NOUVEAU : Cette condition devient vraie dès que l'on quitte l'intro
   const isEnteringOrScene = phase !== "intro";
@@ -57,6 +64,7 @@ export default function App() {
       )}
 
       <MusicPlayer autoStart={isEnteringOrScene} />
+      <NavMenu visible={inScene} />
 
       {/* Fondu blanc quand on entre dans la maison */}
       <div
@@ -79,11 +87,12 @@ export default function App() {
         events={pointerEvents}
         camera={{ position: [0, 9, 17], fov: 50 }}
         gl={{ alpha: true }}
+        style={{ touchAction: "none" }}
       >
         <PerformanceMonitor
           flipflops={3}
           onDecline={() => setDpr(1)}
-          onIncline={() => setDpr(1.5)}
+          onIncline={() => setDpr(MAX_DPR)}
           onFallback={() => setDpr(1)}
         />
 
@@ -92,9 +101,9 @@ export default function App() {
         )}
 
         <Suspense fallback={null}>
-          <Scene started={inScene} />
+          <Scene started={inScene} lowPower={IS_MOBILE} />
           <Sparkles
-            count={70}
+            count={IS_MOBILE ? 30 : 70}
             scale={[22, 10, 22]}
             size={3}
             speed={0.3}

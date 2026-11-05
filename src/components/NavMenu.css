@@ -1,0 +1,432 @@
+.nav,
+.nav-chip {
+  --nav-ink: #fdf7ff;
+  --nav-ink-soft: rgba(253, 247, 255, 0.72);
+  --nav-deep: #2a1040;
+  --nav-accent: linear-gradient(135deg, #d47fe0 0%, #9a4fc4 55%, #7b3fa0 100%);
+  --nav-glass: rgba(42, 16, 64, 0.38);
+  --nav-line: rgba(255, 255, 255, 0.22);
+  --nav-shadow: 0 12px 36px rgba(42, 16, 64, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  --nav-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  font-family: system-ui, "Segoe UI", sans-serif;
+  color: var(--nav-ink);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav :where(button),
+.nav-chip {
+  font: inherit;
+  color: inherit;
+}
+
+.nav-icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nav button:focus-visible,
+.nav-chip:focus-visible {
+  outline: 2px solid #ffd166;
+  outline-offset: 2px;
+}
+
+/* =================================================================== */
+/*  Bureau : barre flottante en haut                                   */
+/* =================================================================== */
+.nav {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  animation: nav-drop 0.6s var(--nav-ease) both;
+}
+
+.nav__bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 999px;
+  background: var(--nav-glass);
+  border: 1px solid var(--nav-line);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  box-shadow: var(--nav-shadow);
+}
+
+.nav__brand {
+  padding: 0 14px 0 12px;
+  margin-right: 2px;
+  border-right: 1px solid var(--nav-line);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.nav__brand span {
+  color: #ffd166;
+}
+
+.nav__track {
+  position: relative;
+}
+
+.nav__pill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+  background: var(--nav-accent);
+  box-shadow: 0 4px 18px rgba(200, 109, 215, 0.55);
+  transition:
+    left 0.45s var(--nav-ease),
+    width 0.45s var(--nav-ease),
+    opacity 0.25s;
+}
+
+.nav__list {
+  position: relative; /* au-dessus de l'indicateur */
+  display: flex;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--nav-ink-soft);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    background 0.2s;
+}
+
+.nav__item:hover {
+  color: var(--nav-ink);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav__item.is-active {
+  color: #fff;
+  background: transparent;
+}
+
+.nav__desc {
+  display: none;
+}
+
+/* Raccourci clavier : petite bulle au survol */
+.nav__key {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translate(-50%, -4px);
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(42, 16, 64, 0.92);
+  font: 600 11px/1 ui-monospace, monospace;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s,
+    transform 0.2s var(--nav-ease);
+}
+
+.nav__key::before {
+  content: "Key ";
+  font-family: system-ui, sans-serif;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.nav__item:hover .nav__key,
+.nav__item:focus-visible .nav__key {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Éléments propres au mobile */
+.nav__fab,
+.nav__sheet-head,
+.nav__backdrop {
+  display: none;
+}
+
+/* =================================================================== */
+/*  Pastille contextuelle sous la barre (en route / retour)            */
+/* =================================================================== */
+.nav-chip {
+  position: absolute;
+  top: 76px;
+  left: 50%;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--nav-line);
+  background: var(--nav-glass);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  box-shadow: var(--nav-shadow);
+  font-size: 14px;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  animation: chip-in 0.35s var(--nav-ease) both;
+}
+
+.nav-back {
+  padding-left: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nav-back:hover {
+  background: rgba(42, 16, 64, 0.6);
+}
+
+.nav-back kbd {
+  margin-left: 4px;
+  padding: 3px 6px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.16);
+  font: 600 11px/1 ui-monospace, monospace;
+}
+
+.nav-status__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffd166;
+  box-shadow: 0 0 0 0 rgba(255, 209, 102, 0.7);
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes nav-drop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -16px);
+  }
+}
+
+@keyframes chip-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -8px);
+  }
+}
+
+@keyframes pulse {
+  70% {
+    box-shadow: 0 0 0 8px rgba(255, 209, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 209, 102, 0);
+  }
+}
+
+@media (max-width: 1100px) {
+  .nav__brand {
+    display: none;
+  }
+}
+
+/* =================================================================== */
+/*  Mobile / tablette : bouton Menu + feuille qui monte du bas          */
+/* =================================================================== */
+@media (max-width: 860px) {
+  .nav {
+    top: auto;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    transform: none;
+    pointer-events: none;
+    animation: none;
+  }
+
+  .nav__fab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 48px;
+    padding: 0 20px 0 16px;
+    border: 1px solid var(--nav-line);
+    border-radius: 999px;
+    background: var(--nav-glass);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    box-shadow: var(--nav-shadow);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  .nav__fab .nav-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .nav__backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 6, 32, 0.45);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .nav.is-open .nav__backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav__bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+    padding: 16px;
+    border-radius: 24px;
+    background: rgba(42, 16, 64, 0.9);
+    opacity: 0;
+    transform: translateY(calc(100% + 24px));
+    transition:
+      transform 0.4s var(--nav-ease),
+      opacity 0.3s;
+  }
+
+  .nav.is-open .nav__bar {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .nav__brand,
+  .nav__pill,
+  .nav__key {
+    display: none;
+  }
+
+  .nav__sheet-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 14px 4px;
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .nav__close {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+  }
+
+  .nav__list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .nav__item {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--nav-ink);
+    text-align: left;
+    white-space: normal;
+  }
+
+  .nav__item .nav-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .nav__item.is-active {
+    border-color: transparent;
+    background: var(--nav-accent);
+    box-shadow: 0 6px 20px rgba(200, 109, 215, 0.45);
+  }
+
+  .nav__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .nav__label {
+    font-size: 15px;
+  }
+
+  .nav__desc {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.75;
+  }
+
+  .nav-chip {
+    top: 16px;
+    max-width: calc(100vw - 32px);
+  }
+}
+
+/* Écrans tactiles : pas de raccourcis clavier affichés */
+@media (hover: none) {
+  .nav__key,
+  .nav-back kbd {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav,
+  .nav *,
+  .nav-chip {
+    animation: none !important;
+    transition: none !important;
+  }
+}

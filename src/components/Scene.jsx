@@ -67,7 +67,7 @@ const ProjectSecion = lazy(() => import("./sections/ProjectSection"));
 const SkillsSection = lazy(() => import("./sections/SkillsSection"));
 const ContactSection = lazy(() => import("./sections/ContactSection"));
 
-export default function Scene({ started }) {
+export default function Scene({ started, lowPower = false }) {
   const playerRef = useRef();
   const focusRef = useRef(null);
 
@@ -121,14 +121,17 @@ export default function Scene({ started }) {
         </InViewSection>
       </Reveal>
 
-      <EffectComposer multisampling={0}>
-        <Bloom
-          intensity={1.5}
-          luminanceThreshold={0.2}
-          luminanceSmoothing={0.9}
-          mipmapBlur
-        />
-      </EffectComposer>
+      {/* Le Bloom coûte cher sur mobile : désactivé en mode "lowPower" */}
+      {!lowPower && (
+        <EffectComposer multisampling={0}>
+          <Bloom
+            intensity={1.5}
+            luminanceThreshold={0.2}
+            luminanceSmoothing={0.9}
+            mipmapBlur
+          />
+        </EffectComposer>
+      )}
 
       {started && (
         <>
